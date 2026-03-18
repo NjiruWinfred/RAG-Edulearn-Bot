@@ -8,8 +8,6 @@ from pydantic import BaseModel
 from pymongo import MongoClient
 from sentence_transformers import SentenceTransformer
 from sklearn.neighbors import NearestNeighbors
-import nest_asyncio
-nest_asyncio.apply()
 
 from google import genai
 
