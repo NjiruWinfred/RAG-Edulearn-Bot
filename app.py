@@ -133,7 +133,6 @@ def ask_bot(request: QuestionRequest):
 # -----------------------------
 
 if __name__ == "__main__":
-    if __name__ == "__main__":
     import uvicorn
 
     print("=" * 60)
