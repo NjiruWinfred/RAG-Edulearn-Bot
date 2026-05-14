@@ -17,21 +17,6 @@ from google import genai
 
 app = FastAPI()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-MONGO_URI = os.getenv("MONGO_URI")
-
-if GOOGLE_API_KEY:
-    genai.configure(api_key=GOOGLE_API_KEY)
-
-model = genai.GenerativeModel("gemini-2.5-flash") if GOOGLE_API_KEY else None
-client = MongoClient(MONGO_URI) if MONGO_URI else None
-collection = client["edulearn"]["curriculum"] if client else None
-embedding_model = None
-
-# -----------------------------
-# Startup
-# -----------------------------
-
 @app.on_event("startup")
 async def startup_event():
     global embedding_model
@@ -45,6 +30,31 @@ async def startup_event():
     except Exception as exc:
         embedding_model = None
         print(f"Embedding model unavailable: {exc}")
+
+@app.get("/")
+def health():
+    return {
+        "status": "running",
+        "model_ready": embedding_model is not None,
+        "db_ready": collection is not None,
+    }
+
+
+# -----------------------------
+# Startup
+# -----------------------------
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+MONGO_URI = os.getenv("MONGO_URI")
+
+if GOOGLE_API_KEY:
+    genai.configure(api_key=GOOGLE_API_KEY)
+
+model = genai.GenerativeModel("gemini-2.5-flash") if GOOGLE_API_KEY else None
+client = MongoClient(MONGO_URI) if MONGO_URI else None
+collection = client["edulearn"]["curriculum"] if client else None
+embedding_model = None
+
 
 # -----------------------------
 # Request schema
@@ -108,13 +118,6 @@ Question:
 # API endpoints
 # -----------------------------
 
-@app.get("/")
-def health():
-    return {
-        "status": "running",
-        "model_ready": embedding_model is not None,
-        "db_ready": collection is not None,
-    }
 
 @app.post("/ask")
 def ask_bot(request: QuestionRequest):
