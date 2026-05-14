@@ -130,14 +130,16 @@ def ask_bot(request: QuestionRequest):
 # Run server
 # -----------------------------
 
+PORT = int(os.getenv("PORT", 8000))
+
 if __name__ == "__main__":
-    import uvicorn
 
     print("=" * 60)
     print("🚀 EduLearn AI Chatbot API")
     print("=" * 60)
-    print(f"📝 Documentation: http://localhost:8000/docs")
-    print(f"❤️  Health Check: http://localhost:8000/health")
-    print(f"💬 Ask Endpoint: POST http://localhost:8000/ask")
+    print(f"📝 Documentation: http://localhost:{PORT}/docs")
+    print(f"❤️ Health Check: http://localhost:{PORT}/")
+    print(f"💬 Ask Endpoint: POST http://localhost:{PORT}/ask")
     print("=" * 60)
-uvicorn.run(app, host="0.0.0.0", port=PORT)
+
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
