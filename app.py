@@ -130,8 +130,9 @@ def ask_bot(request: QuestionRequest):
 # Run server
 # -----------------------------
 
+PORT = int(os.getenv("PORT", 8000))
+
 if __name__ == "__main__":
-    PORT = int(os.getenv("PORT", 8000))
 
     print("=" * 60)
     print("🚀 EduLearn AI Chatbot API")
